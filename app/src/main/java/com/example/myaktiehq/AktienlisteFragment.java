@@ -2,6 +2,7 @@ package com.example.myaktiehq;
 
 import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -85,6 +87,16 @@ public class AktienlisteFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_aktienliste, container,false);
         ListView aktienListeListView = rootView.findViewById(R.id.listview_aktienliste);
         aktienListeListView.setAdapter(mAktienListeAdapter);
+
+        aktienListeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String aktienInfo = (String) parent.getItemAtPosition(position);
+                Intent aktiendetailIntent = new Intent(getActivity(),AktiendetailActivity.class);
+                aktiendetailIntent.putExtra(Intent.EXTRA_TEXT, aktienInfo);
+                startActivity(aktiendetailIntent);
+            }
+        });
 
         return rootView;
 
