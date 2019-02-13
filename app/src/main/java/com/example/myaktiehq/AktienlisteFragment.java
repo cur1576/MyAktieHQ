@@ -235,6 +235,7 @@ public class AktienlisteFragment extends Fragment {
 
             Node aktienParameter;
             String aktienParameterWert;
+
             for(int i=0;i<anzahlAktien;i++){
                 NodeList aktienParameterListe = aktienListe.item(i).getChildNodes();
                 for(int  j=0;j<anzahlAktienParameter;j++){
