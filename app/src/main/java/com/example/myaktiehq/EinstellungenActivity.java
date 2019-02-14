@@ -18,7 +18,8 @@ public class EinstellungenActivity extends AppCompatActivity {
 //        String gespeicherteAktienliste = sharedPrefs.getString(aktienlistePref.getKey(), "");
 //        onPreferenceChange(aktienlistePref, gespeicherteAktienliste);
 
-        getSupportFragmentManager().beginTransaction().replace(android.R.id.content,new EinstellungenFragment());
+        getSupportFragmentManager().beginTransaction().replace(android.R.id.content,new EinstellungenFragment())
+        .commit();
     }
 
 //    @Override

@@ -17,7 +17,6 @@ public class EinstellungenFragment extends PreferenceFragmentCompat implements P
 
     @Override
     public void onCreatePreferences(Bundle saveInstanceState, String rootKey) {
-
         setPreferencesFromResource(R.xml.preferences,rootKey);
         Preference aktienlistePref = findPreference(getString(R.string.preference_aktienliste_key));
         aktienlistePref.setOnPreferenceChangeListener(this);

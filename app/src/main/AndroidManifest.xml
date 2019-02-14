@@ -29,7 +29,9 @@
 
         <activity android:name=".EinstellungenActivity"
             android:label="@string/titel_activity_einstellungen"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/SettingsTheme">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
