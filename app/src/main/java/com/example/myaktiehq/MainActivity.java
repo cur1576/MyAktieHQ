@@ -1,11 +1,11 @@
 package com.example.myaktiehq;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,8 +31,11 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_settings:
                 Toast.makeText(this,"Settings wurde gedrückt", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this,EinstellungenActivity.class));
+
            //     TextView textView = findViewById(R.id.textView);
            //     textView.setText("geändert");
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
