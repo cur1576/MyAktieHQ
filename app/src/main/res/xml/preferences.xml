@@ -8,4 +8,9 @@
         android:inputType="textMultiLine"
         android:title="@string/preference_aktienliste_titel" />
 
+    <CheckBoxPreference
+        android:title="@string/preference_indizemodus_titel"
+        android:key="@string/preference_indizemodus_key"
+        android:summary="@string/preference_indizemodus_summary"
+        android:defaultValue="false"/>
 </PreferenceScreen>
