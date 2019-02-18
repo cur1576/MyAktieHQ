@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,6 +47,7 @@ public class AktienlisteFragment extends Fragment {
 
     private static final String TAG = AktienlisteFragment.class.getSimpleName();
     private ArrayAdapter<String> mAktienListeAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public AktienlisteFragment(){
 
@@ -71,7 +73,7 @@ public class AktienlisteFragment extends Fragment {
                 "Daimler - Kurs: 84,33 €"
         };
 
-        List<String> aktienListe = new ArrayList<>(Arrays.asList(aktienlisteArray));
+        List<String> aktienListe = new ArrayList<>();    // Arrays.asList(aktienlisteArray)
 
         Log.d(TAG, "onCreateView: ");
 
@@ -97,6 +99,10 @@ public class AktienlisteFragment extends Fragment {
             }
         });
 
+        mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout_aktienliste);
+        mSwipeRefreshLayout.setOnRefreshListener(()-> aktualisiereDaten());
+
+        aktualisiereDaten();
         return rootView;
 
     }
@@ -116,26 +122,30 @@ public class AktienlisteFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_daten_aktualisieren:
-                HoleDatenTask holeDatenTask = new HoleDatenTask();
-
-                SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                String prefAktienlisteKey = getString(R.string.preference_aktienliste_key);
-                String prefAktienlisteDefault = getString(R.string.preference_aktienliste_default);
-                String aktienliste = sPrefs.getString(prefAktienlisteKey,prefAktienlisteDefault);
-
-                String prefIndizemodusKey = getString(R.string.preference_indizemodus_key);
-                Boolean indizemodus = sPrefs.getBoolean(prefIndizemodusKey, false);
-                if(indizemodus){
-                    String indizeListe = "^GDAXI,^TECDAX,^MDAXI,^SDAXI,^GSPC,^N225,^HSI,XAGUSD=X,XAUUSD=X";
-                    holeDatenTask.execute(indizeListe);
-                }else{
-                    holeDatenTask.execute(aktienliste);
-                }
-
-                Toast.makeText(getContext(), "Daten werden abgefragt", Toast.LENGTH_SHORT).show();
+                aktualisiereDaten();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void aktualisiereDaten() {
+        HoleDatenTask holeDatenTask = new HoleDatenTask();
+
+        SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String prefAktienlisteKey = getString(R.string.preference_aktienliste_key);
+        String prefAktienlisteDefault = getString(R.string.preference_aktienliste_default);
+        String aktienliste = sPrefs.getString(prefAktienlisteKey,prefAktienlisteDefault);
+
+        String prefIndizemodusKey = getString(R.string.preference_indizemodus_key);
+        Boolean indizemodus = sPrefs.getBoolean(prefIndizemodusKey, false);
+        if(indizemodus){
+            String indizeListe = "^GDAXI,^TECDAX,^MDAXI,^SDAXI,^GSPC,^N225,^HSI,XAGUSD=X,XAUUSD=X";
+            holeDatenTask.execute(indizeListe);
+        }else{
+            holeDatenTask.execute(aktienliste);
+        }
+
+        Toast.makeText(getContext(), "Daten werden abgefragt", Toast.LENGTH_SHORT).show();
     }
 
     public class HoleDatenTask extends AsyncTask<String,Integer,String[]>{
@@ -223,6 +233,7 @@ public class AktienlisteFragment extends Fragment {
 //                    mAktienListeAdapter.add(aktienString);
 //                }
                 mAktienListeAdapter.addAll(strings);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         }
 
