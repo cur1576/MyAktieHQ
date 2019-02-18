@@ -1,5 +1,7 @@
 package com.example.myaktiehq;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +19,12 @@ public class AktiendetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_aktiendetail,menu);
+        String aktienInfo="";
+        Intent empfangenerIntent = getIntent();
+        if(empfangenerIntent != null && empfangenerIntent.hasExtra(Intent.EXTRA_TEXT)) {
+             aktienInfo = empfangenerIntent.getStringExtra(Intent.EXTRA_TEXT);
+        }
+
         return true;
     }
 
@@ -26,7 +34,31 @@ public class AktiendetailActivity extends AppCompatActivity {
             case R.id.action_settings:
                 Toast.makeText(this, "Settings wurde gedrückt", Toast.LENGTH_SHORT).show();
                 return true;
+                case R.id.action_starte_browser:
+                    zeigeWebsiteImBrowser();
+                    return true;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void zeigeWebsiteImBrowser() {
+        String webseitenUrl="";
+        Intent empfangenerIntent = getIntent();
+        if(empfangenerIntent != null && empfangenerIntent.hasExtra(Intent.EXTRA_TEXT)){
+            String aktienInfo = empfangenerIntent.getStringExtra(Intent.EXTRA_TEXT);
+            int pos = aktienInfo.indexOf(":");
+            String symbol = aktienInfo.substring(0,pos);
+            webseitenUrl = "http://finance.yahoo.com/q?s=" + symbol;
+        }
+        Uri webseitenUri = Uri.parse(webseitenUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW,webseitenUri);
+        if(intent.resolveActivity(getPackageManager())!=null){
+            startActivity(intent);
+        }else{
+            Toast.makeText(this,"Keine Web-App istalliert", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 }
