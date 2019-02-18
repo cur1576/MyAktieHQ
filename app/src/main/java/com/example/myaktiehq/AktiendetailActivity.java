@@ -2,8 +2,10 @@ package com.example.myaktiehq;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -24,7 +26,21 @@ public class AktiendetailActivity extends AppCompatActivity {
         if(empfangenerIntent != null && empfangenerIntent.hasExtra(Intent.EXTRA_TEXT)) {
              aktienInfo = empfangenerIntent.getStringExtra(Intent.EXTRA_TEXT);
         }
+        MenuItem shareMenuItem = menu.findItem(R.id.action_teile_aktiendaten);
 
+        ShareActionProvider sAP;
+        sAP = (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Daten zu: " + aktienInfo);
+
+        if(sAP != null){
+            sAP.setShareIntent(shareIntent);
+        }else {
+            Toast.makeText(this, "Kein Provider vorhanden", Toast.LENGTH_SHORT).show();
+        }
         return true;
     }
 
