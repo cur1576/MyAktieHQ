@@ -1,5 +1,6 @@
 package com.example.myaktiehq;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -58,8 +59,7 @@ public class AktienlisteFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        Log.d(TAG, "onCreateView: Debaugmeldung" + getActivity().toString());
-        Log.e(TAG, "onCreateView: Errormeldung");
+        Log.d(TAG, "onCreateView: FragmentView erstellt");
 
         String [] aktienlisteArray = {
                 "Adidas - Kurs: 73,45 €",
@@ -111,6 +111,61 @@ public class AktienlisteFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        Log.d(TAG, "onCreate: Fragment wird erstellt");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "onAttach: Fragnebt an Activity gebunden");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated: das Fragment ist fertig erstellt");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: Fragment wird gestartet");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: Fragment kann verwendet werden");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: Fragment geht in den Hintergrund");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: Fragment ist im Hintergrund");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView: FragmentView wird zerstört");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: Fragment selbst wird zerstört");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAG, "onDetach: Fragment wird von Activity gelöst");
     }
 
     @Override
