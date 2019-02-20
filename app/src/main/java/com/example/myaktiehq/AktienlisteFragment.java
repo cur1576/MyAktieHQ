@@ -49,6 +49,8 @@ public class AktienlisteFragment extends Fragment {
     private static final String TAG = AktienlisteFragment.class.getSimpleName();
     private ArrayAdapter<String> mAktienListeAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private static final String STATE_DATA = "Finanzdaten";
+    private ArrayList<String> aktienListe;
 
     public AktienlisteFragment(){
 
@@ -61,29 +63,36 @@ public class AktienlisteFragment extends Fragment {
 
         Log.d(TAG, "onCreateView: FragmentView erstellt");
 
-        String [] aktienlisteArray = {
-                "Adidas - Kurs: 73,45 €",
-                "Allianz - Kurs: 145,12 €",
-                "BASF - Kurs: 84,27 €",
-                "Bayer - Kurs: 128,60 €",
-                "Beiersdorf - Kurs: 80,55 €",
-                "BMW St. - Kurs: 104,11 €",
-                "Commerzbank - Kurs: 12,47 €",
-                "Continental - Kurs: 209,94 €",
-                "Daimler - Kurs: 84,33 €"
-        };
+//        Log.i("ABC", "...__"  + getActivity().toString());
 
-        List<String> aktienListe = new ArrayList<>();    // Arrays.asList(aktienlisteArray)
+//        String [] aktienlisteArray = {
+//                "Adidas - Kurs: 73,45 €",
+//                "Allianz - Kurs: 145,12 €",
+//                "BASF - Kurs: 84,27 €",
+//                "Bayer - Kurs: 128,60 €",
+//                "Beiersdorf - Kurs: 80,55 €",
+//                "BMW St. - Kurs: 104,11 €",
+//                "Commerzbank - Kurs: 12,47 €",
+//                "Continental - Kurs: 209,94 €",
+//                "Daimler - Kurs: 84,33 €"
+//        };
 
-        Log.d(TAG, "onCreateView: ");
+        if(savedInstanceState!=null){
+            aktienListe = savedInstanceState.getStringArrayList(STATE_DATA);
+            createAdapter();
+            Log.d(TAG, "onCreateView: Fragment wieder hergestellt");
+        }else{
+            aktienListe = new ArrayList<>();
+            createAdapter();
+            aktualisiereDaten();
 
-        mAktienListeAdapter = new ArrayAdapter<>(
-              getActivity(),                         // Die aktuelle Umgebung (dieser Activity)
-              //    getContext(),                   // anstelle von "getActivity()" geht auch!
-              R.layout.list_item_aktienliste,       // ID der XML-Layout Datei
-              R.id.list_item_aktienliste_textview,      // ID der TextViews
-              aktienListe                               // Beispieldaten in einer ArrayList
-        );
+        }
+
+//        List<String> aktienListe = new ArrayList<>(Arrays.asList(aktienlisteArray));    // Arrays.asList(aktienlisteArray)
+
+//        Log.d(TAG, "onCreateView: ");
+
+
 
         View rootView = inflater.inflate(R.layout.fragment_aktienliste, container,false);
         ListView aktienListeListView = rootView.findViewById(R.id.listview_aktienliste);
@@ -95,23 +104,46 @@ public class AktienlisteFragment extends Fragment {
                 String aktienInfo = (String) parent.getItemAtPosition(position);
                 Intent aktiendetailIntent = new Intent(getActivity(),AktiendetailActivity.class);
                 aktiendetailIntent.putExtra(Intent.EXTRA_TEXT, aktienInfo);
-                startActivity(aktiendetailIntent);
+                AktienlisteFragment.this.startActivity(aktiendetailIntent);
             }
         });
 
         mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout_aktienliste);
         mSwipeRefreshLayout.setOnRefreshListener(()-> aktualisiereDaten());
 
-        aktualisiereDaten();
+//        aktualisiereDaten();
         return rootView;
 
+    }
+
+    private void createAdapter() {
+        mAktienListeAdapter = new ArrayAdapter<>(
+                getActivity(),
+                R.layout.list_item_aktienliste,
+                R.id.list_item_aktienliste_textview,
+                aktienListe
+        );
+
+    }
+
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        int anzahlElemente = mAktienListeAdapter.getCount();
+//        String[] aktienlisteArray = new String[anzahlElemente];
+//        for(int i=0; i<anzahlElemente;i++){
+//            aktienlisteArray[i] = mAktienListeAdapter.getItem(i);
+//        }
+        outState.putStringArrayList(STATE_DATA, aktienListe);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.d(TAG, "onCreate: Fragment wird erstellt");
+        Log.d(TAG, "onCreate: Fragment erstellt");
     }
 
     @Override
